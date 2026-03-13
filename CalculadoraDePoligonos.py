@@ -1,5 +1,5 @@
 TITULO = "Calculadora de poligonos"
-VERSION = "0.0.1"
+VERSION = "0.0.2"
 
 def impr_titulo_version():
   print(f"{TITULO} v{VERSION}\n")
@@ -13,8 +13,8 @@ def calculo_poligono():
 
     try:
 
-      base = int(input("¿Cual es la base? = "))
-      altura = int(input("¿Cual es la altura? = "))
+      base = float(input("¿Cual es la base? = "))
+      altura = float(input("¿Cual es la altura? = "))
       print()
 
       area = base * altura
