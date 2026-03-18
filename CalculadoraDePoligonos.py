@@ -1,5 +1,5 @@
 TITULO = "Calculadora de poligonos"
-VERSION = "0.1.2"
+VERSION = "0.1.3"
 
 def impr_titulo_version():
   print(f"{TITULO} v{VERSION}\n")
@@ -7,7 +7,7 @@ def impr_titulo_version():
 RESPUESTAS_VALIDAS = {1, 2}
 
 def impr_instrucciones():
-  print("Puedo calcular el área de una figura elegida: 1. rectangulo, 2. triangulo\n")
+  print(f"Puedo calcular el área de una figura elegida: 1. Rectangulo ó 2. Triangulo\n")
 
 def pedir_respuesta():
 
@@ -41,27 +41,32 @@ def pedir_numero(mensaje):
       print()
       print("Ingresa solo números\n")
 
+def area_rectangulo(base, altura):
+
+  return base * altura
+
+def area_triangulo(base, altura):
+
+  return (base * altura) / 2
+ 
 def calculo_poligono():
 
   figura = pedir_respuesta()
+   
   base = pedir_numero("¿Cual es la base?: ")
   altura = pedir_numero("¿Cual es la altura?: ")
 
   if figura == 1:
 
-    area = base * altura
-
-    print()
-    print(f"El área de tu rectangulo es = ", area)
-    print()
+    area = area_rectangulo(base, altura)
 
   else:
 
-    area = (base * altura)/2
+    area = area_triangulo(base, altura)
 
-    print()
-    print(f"El área de tu triangulo es = ", area)
-    print()
+  print()
+  print("El area de tu figura es= ",area)
+  print()
 
 def preguntar_reinicio():
 
