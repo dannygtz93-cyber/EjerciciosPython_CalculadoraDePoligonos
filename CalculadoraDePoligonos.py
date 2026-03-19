@@ -1,5 +1,5 @@
 TITULO = "Calculadora de poligonos"
-VERSION = "0.1.3"
+VERSION = "0.1.4"
 
 def impr_titulo_version():
   print(f"{TITULO} v{VERSION}\n")
@@ -48,24 +48,25 @@ def area_rectangulo(base, altura):
 def area_triangulo(base, altura):
 
   return (base * altura) / 2
+
+FIGURAS = {
+  1: ("Rectángulo", area_rectangulo),
+  2: ("Triángulo", area_triangulo)
+}
  
 def calculo_poligono():
 
   figura = pedir_respuesta()
+
+  nombre, funcion = FIGURAS[figura]
    
   base = pedir_numero("¿Cual es la base?: ")
   altura = pedir_numero("¿Cual es la altura?: ")
 
-  if figura == 1:
-
-    area = area_rectangulo(base, altura)
-
-  else:
-
-    area = area_triangulo(base, altura)
+  area = funcion(base, altura)
 
   print()
-  print("El area de tu figura es= ",area)
+  print(f"El area de tu {nombre} es= {area}")
   print()
 
 def preguntar_reinicio():
