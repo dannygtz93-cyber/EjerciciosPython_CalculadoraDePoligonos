@@ -1,13 +1,15 @@
+from math import pi
+
 TITULO = "Calculadora de poligonos"
-VERSION = "0.1.4"
+VERSION = "0.2.4"
 
 def impr_titulo_version():
   print(f"{TITULO} v{VERSION}\n")
 
-RESPUESTAS_VALIDAS = {1, 2}
+RESPUESTAS_VALIDAS = {1, 2, 3}
 
 def impr_instrucciones():
-  print(f"Puedo calcular el área de una figura elegida: 1. Rectangulo ó 2. Triangulo\n")
+  print(f"Puedo calcular el área de una figura elegida: 1. Rectángulo, 2. Triángulo y 3. Circulo\n")
 
 def pedir_respuesta():
 
@@ -15,18 +17,18 @@ def pedir_respuesta():
 
     try:
 
-      figura = int(input("¿Que figura quieres calcular? (1 ó 2): "))
+      figura = int(input("¿Que figura quieres calcular? (1= Rectángulo, 2= Triangulo, 3= Círculo): "))
       print()
 
       if figura in RESPUESTAS_VALIDAS:
         return figura
 
       else:
-        print("Ingresa solo 1 ó 2\n")
+        print("Ingresa solo 1, 2 ó 3\n")
 
     except ValueError:
       print()
-      print("Ingresa solo 1 ó 2\n")
+      print("Ingresa solo 1, 2 ó 3\n")
     
 def pedir_numero(mensaje):
 
@@ -49,9 +51,13 @@ def area_triangulo(base, altura):
 
   return (base * altura) / 2
 
+def area_circulo(radio):
+  return pi * (radio ** 2)
+
 FIGURAS = {
   1: ("Rectángulo", area_rectangulo),
-  2: ("Triángulo", area_triangulo)
+  2: ("Triángulo", area_triangulo),
+  3: ("Círculo", area_circulo)
 }
  
 def calculo_poligono():
@@ -59,11 +65,19 @@ def calculo_poligono():
   figura = pedir_respuesta()
 
   nombre, funcion = FIGURAS[figura]
-   
-  base = pedir_numero("¿Cual es la base?: ")
-  altura = pedir_numero("¿Cual es la altura?: ")
 
-  area = funcion(base, altura)
+  if figura == 3:
+    
+    radio = pedir_numero("¿Cual es el radio?: ")
+
+    area = funcion(radio)
+
+  else:
+   
+    base = pedir_numero("¿Cual es la base?: ")
+    altura = pedir_numero("¿Cual es la altura?: ")
+
+    area = funcion(base, altura)
 
   print()
   print(f"El area de tu {nombre} es= {area}")
