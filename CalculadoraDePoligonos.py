@@ -9,7 +9,7 @@ from math import pi
 # ==========================#
 
 TITULO = "Calculadora de poligonos"
-VERSION = "0.2.6"
+VERSION = "0.2.7"
 
 # ==========================#
 #  FUNCIONES DE INTERFAZ (UI)
@@ -27,7 +27,7 @@ def pedir_respuesta():
 
     try:
 
-      figura = int(input(f"¿Que figura quieres calcular? {OPCIONES}: "))
+      figura = int(input(f"📐 ¿Que figura quieres calcular? {OPCIONES}: "))
       print()
 
       if figura in FIGURAS:
@@ -57,7 +57,7 @@ def preguntar_reinicio():
 
   while True:
     
-    respuesta = input("¿Quieres hacer otro calculo? (s/n): ").strip().lower()
+    respuesta = input("\n¿Quieres hacer otro calculo? (s/n): ").strip().lower()
     print()
 
     if respuesta in ("s", "si"):
@@ -129,11 +129,11 @@ def calcular_area():
 
     datos.append(numero)
   
-  area = round(funcion(*datos), 2)
+  area = funcion(*datos)
 
-  print()
-  print(f"El area de tu {nombre} es = {area}")
-  print()
+  print("\n" + "=" * 40)
+  print(f"✅ El área de tu {nombre} es: {area:.2f}")
+  print("=" * 40)
 
 # ==========================#
 #  ENTRY POINT
