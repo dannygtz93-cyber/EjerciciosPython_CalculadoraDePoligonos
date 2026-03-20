@@ -2,14 +2,14 @@
 #  INPUTS
 # ==========================#
 
-from math import pi
+from math import pi, tan
 
 # ==========================#
 #  CONSTANTES GLOBALES
 # ==========================#
 
 TITULO = "Calculadora de poligonos"
-VERSION = "0.2.7"
+VERSION = "0.3.7"
 
 # ==========================#
 #  FUNCIONES DE INTERFAZ (UI)
@@ -40,18 +40,25 @@ def pedir_respuesta():
       print()
       print(f"Ingresa solo {OPCIONES}\n")
     
-def pedir_numero(mensaje):
+def pedir_entrada(mensaje, minimo, tipo_esperado=float):
+    while True:
+        try:
+            valor_raw = input(mensaje)
+            if tipo_esperado == int:
+                numero = float(valor_raw)
+                if not numero.is_integer():
+                    print("❌ El número de lados debe ser un entero (sin decimales).")
+                    continue
+                numero = int(numero)
+            else:
+                numero = float(valor_raw)
 
-  while True:
-
-    try:
-
-      numero = float(input(mensaje))
-      return numero
-
-    except ValueError:
-      print()
-      print("Ingresa solo números\n")
+            if numero >= minimo:
+                return numero
+            
+            print(f"❌ El valor debe ser al menos {minimo}")
+        except ValueError:
+            print(f"❌ Entrada inválida. Por favor ingresa un número {'entero' if tipo_esperado == int else 'válido'}.")
 
 def preguntar_reinicio():
 
@@ -86,27 +93,56 @@ def area_triangulo(base, altura):
 def area_circulo(radio):
   return pi * (radio ** 2)
 
+def area_poligono_regular(n_lados, lado):
+    apotema = lado / (2 * tan(pi / n_lados))
+    perimetro = n_lados * lado
+    return (perimetro * apotema) / 2
+
 # ==========================#
 # CONFIGURACIÓN DEL SISTEMA
 # ==========================#
 
 FIGURAS = {
-  1: ("Rectángulo", area_rectangulo, ["la base", "la altura"]),
-  2: ("Triángulo", area_triangulo, ["la base", "la altura"]),
-  3: ("Círculo", area_circulo, ["el radio"])
+    1: {
+        "nombre": "Rectángulo",
+        "funcion": area_rectangulo,
+        "params": {
+            "la base": {"min": 0.1, "tipo": float},
+            "la altura": {"min": 0.1, "tipo": float}
+        }
+    },
+    2: {
+        "nombre": "Triángulo",
+        "funcion": area_triangulo,
+        "params": {
+            "la base": {"min": 0.1, "tipo": float},
+            "la altura": {"min": 0.1, "tipo": float}
+        }
+    },
+    3: {
+        "nombre": "Círculo",
+        "funcion": area_circulo,
+        "params": {
+            "el radio": {"min": 0.1, "tipo": float}
+        }
+    },
+    4: {
+        "nombre": "Polígono Regular",
+        "funcion": area_poligono_regular,
+        "params": {
+            "el número de lados": {"min": 3, "tipo": int},
+            "la longitud de un lado": {"min": 0.1, "tipo": float}
+        }
+    }
 }
 
 OPCIONES = ", ".join(map(str, FIGURAS.keys()))
 
 MENU = []
 
-for clave, datos in FIGURAS.items():
-
-  clave = clave
-  datos = datos[0]
-
-  texto = (f"{clave}. {datos}")
-  
+for clave, config in FIGURAS.items():
+  nombre = config["nombre"]
+  texto = f"{clave}. {nombre}"
   MENU.append(texto)
 
 MENU_INTERACTIVO = ", ".join(MENU)
@@ -116,24 +152,20 @@ MENU_INTERACTIVO = ", ".join(MENU)
 # ==========================#
  
 def calcular_area():
-
-  figura = pedir_respuesta()
-
-  nombre, funcion, parametros = FIGURAS[figura]
-
-  datos = []
-
-  for parametro in parametros:
-
-    numero = pedir_numero(f"Ingresa {parametro}: ")
-
-    datos.append(numero)
-  
-  area = funcion(*datos)
-
-  print("\n" + "=" * 40)
-  print(f"✅ El área de tu {nombre} es: {area:.2f}")
-  print("=" * 40)
+    figura_id = pedir_respuesta()
+    config = FIGURAS[figura_id]
+    
+    argumentos = []
+    for nombre_p, meta in config["params"].items():
+        valor = pedir_entrada(
+            f"Ingresa {nombre_p}: ", 
+            minimo=meta["min"], 
+            tipo_esperado=meta["tipo"]
+        )
+        argumentos.append(valor)
+    
+    resultado = config["funcion"](*argumentos)
+    print(f"\n✅ El área de tu {config['nombre']} es: {resultado:.2f}")
 
 # ==========================#
 #  ENTRY POINT
