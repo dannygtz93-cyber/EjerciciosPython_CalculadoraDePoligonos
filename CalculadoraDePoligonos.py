@@ -1,13 +1,25 @@
+# ==========================#
+#  INPUTS
+# ==========================#
+
 from math import pi
 
+# ==========================#
+#  CONSTANTES GLOBALES
+# ==========================#
+
 TITULO = "Calculadora de poligonos"
-VERSION = "0.2.5"
+VERSION = "0.2.6"
+
+# ==========================#
+#  FUNCIONES DE INTERFAZ (UI)
+# ==========================#
 
 def impr_titulo_version():
   print(f"{TITULO} v{VERSION}\n")
 
 def impr_instrucciones():
-  print(f"Puedo calcular el área de una figura elegida: 1. Rectángulo, 2. Triángulo y 3. Círculo\n")
+  print(f"Puedo calcular el área de una figura elegida: {MENU_INTERACTIVO}\n")
 
 def pedir_respuesta():
 
@@ -59,6 +71,10 @@ def preguntar_reinicio():
     else:
       print("Responde solo: s o n\n")
 
+# ==========================#
+#  LOGICA DE NEGOCIO (CORE)
+# ==========================#
+
 def area_rectangulo(base, altura):
 
   return base * altura
@@ -70,6 +86,10 @@ def area_triangulo(base, altura):
 def area_circulo(radio):
   return pi * (radio ** 2)
 
+# ==========================#
+# CONFIGURACIÓN DEL SISTEMA
+# ==========================#
+
 FIGURAS = {
   1: ("Rectángulo", area_rectangulo, ["la base", "la altura"]),
   2: ("Triángulo", area_triangulo, ["la base", "la altura"]),
@@ -77,6 +97,23 @@ FIGURAS = {
 }
 
 OPCIONES = ", ".join(map(str, FIGURAS.keys()))
+
+MENU = []
+
+for clave, datos in FIGURAS.items():
+
+  clave = clave
+  datos = datos[0]
+
+  texto = (f"{clave}. {datos}")
+  
+  MENU.append(texto)
+
+MENU_INTERACTIVO = ", ".join(MENU)
+
+# ==========================#
+#  ORQUESTACIÓN (FLUJO)
+# ==========================#
  
 def calcular_area():
 
@@ -88,7 +125,7 @@ def calcular_area():
 
   for parametro in parametros:
 
-    numero = pedir_numero(f"Ingresa tu {parametro}: ")
+    numero = pedir_numero(f"Ingresa {parametro}: ")
 
     datos.append(numero)
   
@@ -97,6 +134,10 @@ def calcular_area():
   print()
   print(f"El area de tu {nombre} es = {area}")
   print()
+
+# ==========================#
+#  ENTRY POINT
+# ==========================#
 
 def main ():
 
