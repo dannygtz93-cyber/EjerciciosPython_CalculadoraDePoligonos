@@ -1,15 +1,13 @@
 from math import pi
 
 TITULO = "Calculadora de poligonos"
-VERSION = "0.2.4"
+VERSION = "0.2.5"
 
 def impr_titulo_version():
   print(f"{TITULO} v{VERSION}\n")
 
-RESPUESTAS_VALIDAS = {1, 2, 3}
-
 def impr_instrucciones():
-  print(f"Puedo calcular el área de una figura elegida: 1. Rectángulo, 2. Triángulo y 3. Circulo\n")
+  print(f"Puedo calcular el área de una figura elegida: 1. Rectángulo, 2. Triángulo y 3. Círculo\n")
 
 def pedir_respuesta():
 
@@ -17,18 +15,18 @@ def pedir_respuesta():
 
     try:
 
-      figura = int(input("¿Que figura quieres calcular? (1= Rectángulo, 2= Triangulo, 3= Círculo): "))
+      figura = int(input(f"¿Que figura quieres calcular? {OPCIONES}: "))
       print()
 
-      if figura in RESPUESTAS_VALIDAS:
+      if figura in FIGURAS:
         return figura
 
       else:
-        print("Ingresa solo 1, 2 ó 3\n")
+        print(f"Ingresa solo {OPCIONES}\n")
 
     except ValueError:
       print()
-      print("Ingresa solo 1, 2 ó 3\n")
+      print(f"Ingresa solo {OPCIONES}\n")
     
 def pedir_numero(mensaje):
 
@@ -42,46 +40,6 @@ def pedir_numero(mensaje):
     except ValueError:
       print()
       print("Ingresa solo números\n")
-
-def area_rectangulo(base, altura):
-
-  return base * altura
-
-def area_triangulo(base, altura):
-
-  return (base * altura) / 2
-
-def area_circulo(radio):
-  return pi * (radio ** 2)
-
-FIGURAS = {
-  1: ("Rectángulo", area_rectangulo),
-  2: ("Triángulo", area_triangulo),
-  3: ("Círculo", area_circulo)
-}
- 
-def calculo_poligono():
-
-  figura = pedir_respuesta()
-
-  nombre, funcion = FIGURAS[figura]
-
-  if figura == 3:
-    
-    radio = pedir_numero("¿Cual es el radio?: ")
-
-    area = funcion(radio)
-
-  else:
-   
-    base = pedir_numero("¿Cual es la base?: ")
-    altura = pedir_numero("¿Cual es la altura?: ")
-
-    area = funcion(base, altura)
-
-  print()
-  print(f"El area de tu {nombre} es= {area}")
-  print()
 
 def preguntar_reinicio():
 
@@ -101,6 +59,44 @@ def preguntar_reinicio():
     else:
       print("Responde solo: s o n\n")
 
+def area_rectangulo(base, altura):
+
+  return base * altura
+
+def area_triangulo(base, altura):
+
+  return (base * altura) / 2
+
+def area_circulo(radio):
+  return pi * (radio ** 2)
+
+FIGURAS = {
+  1: ("Rectángulo", area_rectangulo, ["la base", "la altura"]),
+  2: ("Triángulo", area_triangulo, ["la base", "la altura"]),
+  3: ("Círculo", area_circulo, ["el radio"])
+}
+
+OPCIONES = ", ".join(map(str, FIGURAS.keys()))
+ 
+def calcular_area():
+
+  figura = pedir_respuesta()
+
+  nombre, funcion, parametros = FIGURAS[figura]
+
+  datos = []
+
+  for parametro in parametros:
+
+    numero = pedir_numero(f"Ingresa tu {parametro}: ")
+
+    datos.append(numero)
+  
+  area = round(funcion(*datos), 2)
+
+  print()
+  print(f"El area de tu {nombre} es = {area}")
+  print()
 
 def main ():
 
@@ -109,7 +105,7 @@ def main ():
 
   while True:
 
-    calculo_poligono()
+    calcular_area()
 
     if not preguntar_reinicio():
       print("¡Gracias por usar la calculadora!\n")
