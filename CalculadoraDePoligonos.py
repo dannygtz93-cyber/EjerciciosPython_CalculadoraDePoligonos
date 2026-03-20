@@ -9,7 +9,7 @@ from math import pi, tan
 # ==========================#
 
 TITULO = "Calculadora de poligonos"
-VERSION = "0.3.7"
+VERSION = "0.3.8"
 
 # ==========================#
 #  FUNCIONES DE INTERFAZ (UI)
@@ -56,7 +56,7 @@ def pedir_entrada(mensaje, minimo, tipo_esperado=float):
             if numero >= minimo:
                 return numero
             
-            print(f"❌ El valor debe ser al menos {minimo}")
+            print(f"❌ El valor debe ser mayor o igual a {minimo}")
         except ValueError:
             print(f"❌ Entrada inválida. Por favor ingresa un número {'entero' if tipo_esperado == int else 'válido'}.")
 
@@ -106,33 +106,33 @@ FIGURAS = {
     1: {
         "nombre": "Rectángulo",
         "funcion": area_rectangulo,
-        "params": {
-            "la base": {"min": 0.1, "tipo": float},
-            "la altura": {"min": 0.1, "tipo": float}
-        }
+        "params": [
+            {"nombre": "la base", "min": 0.1, "tipo": float},
+            {"nombre": "la altura", "min": 0.1, "tipo": float}
+        ]
     },
     2: {
         "nombre": "Triángulo",
         "funcion": area_triangulo,
-        "params": {
-            "la base": {"min": 0.1, "tipo": float},
-            "la altura": {"min": 0.1, "tipo": float}
-        }
+        "params": [
+            {"nombre": "la base", "min": 0.1, "tipo": float},
+            {"nombre": "la altura", "min": 0.1, "tipo": float}
+        ]
     },
     3: {
         "nombre": "Círculo",
         "funcion": area_circulo,
-        "params": {
-            "el radio": {"min": 0.1, "tipo": float}
-        }
+        "params": [
+            {"nombre": "el radio", "min": 0.1, "tipo": float}
+        ]
     },
     4: {
         "nombre": "Polígono Regular",
         "funcion": area_poligono_regular,
-        "params": {
-            "el número de lados": {"min": 3, "tipo": int},
-            "la longitud de un lado": {"min": 0.1, "tipo": float}
-        }
+        "params": [
+            {"nombre": "el número de lados", "min": 3, "tipo": int},
+            {"nombre": "la longitud de un lado", "min": 0.1, "tipo": float}
+        ]
     }
 }
 
@@ -156,13 +156,13 @@ def calcular_area():
     config = FIGURAS[figura_id]
     
     argumentos = []
-    for nombre_p, meta in config["params"].items():
-        valor = pedir_entrada(
-            f"Ingresa {nombre_p}: ", 
-            minimo=meta["min"], 
-            tipo_esperado=meta["tipo"]
-        )
-        argumentos.append(valor)
+    for param in config["params"]:
+      valor = pedir_entrada(
+        f"Ingresa {param['nombre']}: ",
+        minimo=param["min"],
+        tipo_esperado=param["tipo"]
+    )
+      argumentos.append(valor)
     
     resultado = config["funcion"](*argumentos)
     print(f"\n✅ El área de tu {config['nombre']} es: {resultado:.2f}")
