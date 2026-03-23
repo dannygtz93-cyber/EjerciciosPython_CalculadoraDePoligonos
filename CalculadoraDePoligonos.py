@@ -166,9 +166,9 @@ def calcular_area():
     
     resultado = config["funcion"](*argumentos)
 
-    print("\n" + "=" * 40)
+    print("\n" + "=" * 45)
     print(f"✅ El área de tu {config['nombre']} es: {resultado:.2f}")
-    print("=" * 40)
+    print("=" * 45)
 
 # ==========================#
 #  ENTRY POINT
