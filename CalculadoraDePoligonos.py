@@ -9,7 +9,7 @@ from math import pi, tan
 # ==========================#
 
 TITULO = "Calculadora de poligonos"
-VERSION = "0.3.8"
+VERSION = "0.4.0"
 
 # ==========================#
 #  FUNCIONES DE INTERFAZ (UI)
@@ -27,7 +27,7 @@ def pedir_respuesta():
 
     try:
 
-      figura = int(input(f"📐 ¿Que figura quieres calcular? {OPCIONES}: "))
+      figura = int(input(f"📐 ¿Que figura quieres calcular? {MENU_INTERACTIVO}: "))
       print()
 
       if figura in FIGURAS:
@@ -94,9 +94,15 @@ def area_circulo(radio):
   return pi * (radio ** 2)
 
 def area_poligono_regular(n_lados, lado):
-    apotema = lado / (2 * tan(pi / n_lados))
-    perimetro = n_lados * lado
-    return (perimetro * apotema) / 2
+  apotema = lado / (2 * tan(pi / n_lados))
+  perimetro = n_lados * lado
+  return (perimetro * apotema) / 2
+
+def area_trapecio(base_mayor, base_menor, altura):
+   return ((base_mayor + base_menor) * altura) / 2
+
+def area_elipse(a, b):
+    return pi * a * b
 
 # ==========================#
 # CONFIGURACIÓN DEL SISTEMA
@@ -107,32 +113,49 @@ FIGURAS = {
         "nombre": "Rectángulo",
         "funcion": area_rectangulo,
         "params": [
-            {"label": "la base", "min": 0.1, "tipo": float},
-            {"label": "la altura", "min": 0.1, "tipo": float}
+            {"mensaje": "la base", "min": 0.1, "tipo": float},
+            {"mensaje": "la altura", "min": 0.1, "tipo": float}
         ]
     },
     2: {
         "nombre": "Triángulo",
         "funcion": area_triangulo,
         "params": [
-            {"label": "la base", "min": 0.1, "tipo": float},
-            {"label": "la altura", "min": 0.1, "tipo": float}
+            {"mensaje": "la base", "min": 0.1, "tipo": float},
+            {"mensaje": "la altura", "min": 0.1, "tipo": float}
         ]
     },
     3: {
         "nombre": "Círculo",
         "funcion": area_circulo,
         "params": [
-            {"label": "el radio", "min": 0.1, "tipo": float}
+            {"mensaje": "el radio", "min": 0.1, "tipo": float}
         ]
     },
     4: {
         "nombre": "Polígono Regular",
         "funcion": area_poligono_regular,
         "params": [
-            {"label": "el número de lados", "min": 3, "tipo": int},
-            {"label": "la longitud de un lado", "min": 0.1, "tipo": float}
+            {"mensaje": "el número de lados", "min": 3, "tipo": int},
+            {"mensaje": "la longitud de un lado", "min": 0.1, "tipo": float}
         ]
+    },
+    5: {
+        "nombre": "Trapecio",
+        "funcion": area_trapecio,
+        "params": [
+            {"mensaje": "la base mayor", "min": 0.1, "tipo": float},
+            {"mensaje": "la base menor", "min": 0.1, "tipo": float},
+            {"mensaje": "la altura", "min": 0.1, "tipo": float}
+        ]
+    },
+    6: {
+        "nombre": "Elipse",
+        "funcion": area_elipse,
+        "params": [
+            {"mensaje": "el semieje mayor (a)", "min": 0.1, "tipo": float},
+            {"mensaje": "el semieje menor (b)", "min": 0.1, "tipo": float}
+       ]
     }
 }
 
@@ -158,7 +181,7 @@ def calcular_area():
     argumentos = []
     for param in config["params"]:
       valor = pedir_entrada(
-        f"Ingresa {param['label']}: ",
+        f"Ingresa {param['mensaje']}: ",
         minimo=param["min"],
         tipo_esperado=param["tipo"]
     )
