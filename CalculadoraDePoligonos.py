@@ -107,31 +107,31 @@ FIGURAS = {
         "nombre": "Rectángulo",
         "funcion": area_rectangulo,
         "params": [
-            {"nombre": "la base", "min": 0.1, "tipo": float},
-            {"nombre": "la altura", "min": 0.1, "tipo": float}
+            {"label": "la base", "min": 0.1, "tipo": float},
+            {"label": "la altura", "min": 0.1, "tipo": float}
         ]
     },
     2: {
         "nombre": "Triángulo",
         "funcion": area_triangulo,
         "params": [
-            {"nombre": "la base", "min": 0.1, "tipo": float},
-            {"nombre": "la altura", "min": 0.1, "tipo": float}
+            {"label": "la base", "min": 0.1, "tipo": float},
+            {"label": "la altura", "min": 0.1, "tipo": float}
         ]
     },
     3: {
         "nombre": "Círculo",
         "funcion": area_circulo,
         "params": [
-            {"nombre": "el radio", "min": 0.1, "tipo": float}
+            {"label": "el radio", "min": 0.1, "tipo": float}
         ]
     },
     4: {
         "nombre": "Polígono Regular",
         "funcion": area_poligono_regular,
         "params": [
-            {"nombre": "el número de lados", "min": 3, "tipo": int},
-            {"nombre": "la longitud de un lado", "min": 0.1, "tipo": float}
+            {"label": "el número de lados", "min": 3, "tipo": int},
+            {"label": "la longitud de un lado", "min": 0.1, "tipo": float}
         ]
     }
 }
@@ -158,7 +158,7 @@ def calcular_area():
     argumentos = []
     for param in config["params"]:
       valor = pedir_entrada(
-        f"Ingresa {param['nombre']}: ",
+        f"Ingresa {param['label']}: ",
         minimo=param["min"],
         tipo_esperado=param["tipo"]
     )
