@@ -9,7 +9,7 @@ from math import pi, tan
 # ==========================#
 
 TITULO = "Calculadora de poligonos"
-VERSION = "0.4.0"
+VERSION = "0.5.0"
 
 # ==========================#
 #  FUNCIONES DE INTERFAZ (UI)
@@ -19,7 +19,7 @@ def impr_titulo_version():
   print(f"{TITULO} v{VERSION}\n")
 
 def impr_instrucciones():
-  print(f"Puedo calcular el área de una figura elegida: {MENU_INTERACTIVO}\n")
+  print(f"¡Bienvenido a la {TITULO}! Puedo calcular el area de una figura elegida:\n")
 
 def pedir_respuesta():
 
@@ -27,18 +27,33 @@ def pedir_respuesta():
 
     try:
 
-      figura = int(input(f"📐 ¿Que figura quieres calcular? {MENU_INTERACTIVO}: "))
+      print(MENU_INTERACTIVO)
+      figura = int(input("\n📐 ¿Qué figura quieres calcular?: "))
       print()
 
-      if figura in FIGURAS:
+      if 1 <= figura <= len(FIGURAS):
         return figura
 
       else:
-        print(f"Ingresa solo {OPCIONES}\n")
+        print(f"Ingresa un número entre 1 y {len(FIGURAS)}\n")
 
     except ValueError:
-      print()
-      print(f"Ingresa solo {OPCIONES}\n")
+      print(f"\n❌ Ingresa un número entre 1 y {len(FIGURAS)}\n")
+
+def pedir_tipo_calculo():
+
+    print("1. Área")
+    print("2. Perímetro")
+    print()
+
+    while True:
+        opcion = input("¿Qué deseas calcular?: ")
+        print()
+
+        if opcion in ("1", "2"):
+            return opcion
+
+        print("Ingresa 1 o 2")
     
 def pedir_entrada(mensaje, minimo, tipo_esperado=float):
     while True:
@@ -79,118 +94,164 @@ def preguntar_reinicio():
       print("Responde solo: s o n\n")
 
 # ==========================#
-#  LOGICA DE NEGOCIO (CORE)
+#  CLASES
 # ==========================#
 
-def area_rectangulo(base, altura):
+class Figura:
+  def __init__(self, nombre, params):
+    self.nombre = nombre
+    self.params = params
 
-  return base * altura
+  def area(self):
+    pass
 
-def area_triangulo(base, altura):
+  def perimetro(self):
+    pass
 
-  return (base * altura) / 2
+class Rectangulo(Figura):
+   
+  def __init__(self):
+    params = [
+            {"mensaje": "la base", "min": 0.1, "tipo": float},
+            {"mensaje": "la altura", "min": 0.1, "tipo": float}
+            ]
+    super().__init__("Rectángulo", params)
 
-def area_circulo(radio):
-  return pi * (radio ** 2)
+  def area(self, base, altura):
+    return base * altura
+  
+  def perimetro(self, base, altura):
+    return 2 * (base + altura)
+   
+class Triangulo(Figura):
+   
+  def __init__(self):
+    params = [
+            {"mensaje": "la base", "min": 0.1, "tipo": float},
+            {"mensaje": "la altura", "min": 0.1, "tipo": float}
+            ]
+    super().__init__("Triángulo", params)
 
-def area_poligono_regular(n_lados, lado):
-  apotema = lado / (2 * tan(pi / n_lados))
-  perimetro = n_lados * lado
-  return (perimetro * apotema) / 2
+  def area(self, base, altura):
+    return (base * altura) / 2
+  
+  def perimetro(self, *args):
+    print("Perímetro no disponible para esta figura")
+    return None
+  
+class Circulo(Figura):
+   
+  def __init__(self):
+    params = [
+            {"mensaje": "el radio", "min": 0.1, "tipo": float}
+            ]
+    super().__init__("Círculo", params)
 
-def area_trapecio(base_mayor, base_menor, altura):
-   return ((base_mayor + base_menor) * altura) / 2
+  def area(self, radio):
+    return pi * (radio ** 2)
+  
+  def perimetro(self, radio):
+    return 2 * pi * radio
+  
+class PoligonoRegular(Figura):
+   
+  def __init__(self):
+    params = [
+            {"mensaje": "el número de lados", "min": 3, "tipo": int},
+            {"mensaje": "la longitud de un lado", "min": 0.1, "tipo": float}
+            ]
+    super().__init__("Polígono regular", params)
 
-def area_elipse(a, b):
+  def area(self, n_lados, lado):
+    apotema = lado / (2 * tan(pi / n_lados))
+    perimetro = n_lados * lado
+    return (perimetro * apotema) / 2
+  
+  def perimetro(self, n_lados, lado):
+    return n_lados * lado
+  
+class Trapecio(Figura):
+
+  def __init__(self):
+    params = [
+            {"mensaje": "la base mayor", "min": 0.1, "tipo": float},
+            {"mensaje": "la base menor", "min": 0.1, "tipo": float},
+            {"mensaje": "la altura", "min": 0.1, "tipo": float}
+            ]
+    super().__init__("Trapecio", params)
+
+  def area(self, base_mayor, base_menor, altura):
+    return ((base_mayor + base_menor) * altura) / 2
+  
+  def perimetro(self, *args):
+    print("Perímetro no disponible para esta figura")
+    return None
+  
+class Elipse(Figura):
+
+  def __init__(self):
+    params = [
+            {"mensaje": "el semieje mayor (a)", "min": 0.1, "tipo": float},
+            {"mensaje": "el semieje menor (b)", "min": 0.1, "tipo": float}
+            ]
+    super().__init__("Elipse", params)
+
+  def area(self, a, b):
     return pi * a * b
+  
+  def perimetro(self, a, b):
+    return pi * (3*(a+b) - ((3*a + b)*(a + 3*b))**0.5)
 
 # ==========================#
 # CONFIGURACIÓN DEL SISTEMA
 # ==========================#
 
-FIGURAS = {
-    1: {
-        "nombre": "Rectángulo",
-        "funcion": area_rectangulo,
-        "params": [
-            {"mensaje": "la base", "min": 0.1, "tipo": float},
-            {"mensaje": "la altura", "min": 0.1, "tipo": float}
-        ]
-    },
-    2: {
-        "nombre": "Triángulo",
-        "funcion": area_triangulo,
-        "params": [
-            {"mensaje": "la base", "min": 0.1, "tipo": float},
-            {"mensaje": "la altura", "min": 0.1, "tipo": float}
-        ]
-    },
-    3: {
-        "nombre": "Círculo",
-        "funcion": area_circulo,
-        "params": [
-            {"mensaje": "el radio", "min": 0.1, "tipo": float}
-        ]
-    },
-    4: {
-        "nombre": "Polígono Regular",
-        "funcion": area_poligono_regular,
-        "params": [
-            {"mensaje": "el número de lados", "min": 3, "tipo": int},
-            {"mensaje": "la longitud de un lado", "min": 0.1, "tipo": float}
-        ]
-    },
-    5: {
-        "nombre": "Trapecio",
-        "funcion": area_trapecio,
-        "params": [
-            {"mensaje": "la base mayor", "min": 0.1, "tipo": float},
-            {"mensaje": "la base menor", "min": 0.1, "tipo": float},
-            {"mensaje": "la altura", "min": 0.1, "tipo": float}
-        ]
-    },
-    6: {
-        "nombre": "Elipse",
-        "funcion": area_elipse,
-        "params": [
-            {"mensaje": "el semieje mayor (a)", "min": 0.1, "tipo": float},
-            {"mensaje": "el semieje menor (b)", "min": 0.1, "tipo": float}
-       ]
-    }
-}
-
-OPCIONES = ", ".join(map(str, FIGURAS.keys()))
+FIGURAS = [
+  Rectangulo(),
+  Triangulo(),
+  Circulo(),
+  PoligonoRegular(),
+  Trapecio(),
+  Elipse()
+]
 
 MENU = []
 
-for clave, config in FIGURAS.items():
-  nombre = config["nombre"]
-  texto = f"{clave}. {nombre}"
+for indice, figura in enumerate (FIGURAS, 1):
+  texto = f"{indice}. {figura.nombre}"
   MENU.append(texto)
 
-MENU_INTERACTIVO = ", ".join(MENU)
+MENU_INTERACTIVO = "\n".join(MENU)
 
 # ==========================#
 #  ORQUESTACIÓN (FLUJO)
 # ==========================#
  
-def calcular_area():
+def calcular_figura():
+
     figura_id = pedir_respuesta()
-    config = FIGURAS[figura_id]
-    
+    config = FIGURAS[figura_id - 1]
+
+    tipo = pedir_tipo_calculo()
+
     argumentos = []
-    for param in config["params"]:
-      valor = pedir_entrada(
-        f"Ingresa {param['mensaje']}: ",
-        minimo=param["min"],
-        tipo_esperado=param["tipo"]
-    )
-      argumentos.append(valor)
-    
-    resultado = config["funcion"](*argumentos)
+    for param in config.params:
+        valor = pedir_entrada(
+            f"Ingresa {param['mensaje']}: ",
+            minimo=param["min"],
+            tipo_esperado=param["tipo"]
+        )
+        argumentos.append(valor)
+
+    if tipo == "1":
+        resultado = config.area(*argumentos)
+        texto = "área"
+    else:
+        resultado = config.perimetro(*argumentos)
+        texto = "perímetro"
 
     print("\n" + "=" * 45)
-    print(f"✅ El área de tu {config['nombre']} es: {resultado:.2f}")
+    print(f"✅ El {texto} de tu {config.nombre} es: {resultado:.2f}")
     print("=" * 45)
 
 # ==========================#
@@ -204,7 +265,7 @@ def main ():
 
   while True:
 
-    calcular_area()
+    calcular_figura()
 
     if not preguntar_reinicio():
       print("¡Gracias por usar la calculadora!\n")
