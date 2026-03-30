@@ -19,7 +19,7 @@ def impr_titulo_version():
   print(f"{TITULO} v{VERSION}\n")
 
 def impr_instrucciones():
-  print(f"¡Bienvenido a la {TITULO}! Puedo calcular el area de una figura elegida:\n")
+  print(f"¡Bienvenido a la {TITULO}! Puedo calcular el area y el perimetro de una figura elegida:\n")
 
 def pedir_respuesta():
 
