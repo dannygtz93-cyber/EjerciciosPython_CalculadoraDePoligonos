@@ -98,9 +98,10 @@ def preguntar_reinicio():
 # ==========================#
 
 class Figura:
-  def __init__(self, nombre, params):
+  def __init__(self, nombre, params, soporta_perimetro=True):
     self.nombre = nombre
     self.params = params
+    self.soporta_perimetro = soporta_perimetro
 
   def area(self):
     pass
@@ -130,13 +131,13 @@ class Triangulo(Figura):
             {"mensaje": "la base", "min": 0.1, "tipo": float},
             {"mensaje": "la altura", "min": 0.1, "tipo": float}
             ]
-    super().__init__("Triángulo", params)
+    super().__init__("Triángulo", params, soporta_perimetro=False)
 
   def area(self, base, altura):
     return (base * altura) / 2
   
   def perimetro(self, *args):
-    print("Perímetro no disponible para esta figura")
+    print("\nPerímetro no disponible para esta figura")
     return None
   
 class Circulo(Figura):
@@ -178,13 +179,13 @@ class Trapecio(Figura):
             {"mensaje": "la base menor", "min": 0.1, "tipo": float},
             {"mensaje": "la altura", "min": 0.1, "tipo": float}
             ]
-    super().__init__("Trapecio", params)
+    super().__init__("Trapecio", params, soporta_perimetro=False)
 
   def area(self, base_mayor, base_menor, altura):
     return ((base_mayor + base_menor) * altura) / 2
   
   def perimetro(self, *args):
-    print("Perímetro no disponible para esta figura")
+    print("\nPerímetro no disponible para esta figura")
     return None
   
 class Elipse(Figura):
@@ -234,6 +235,10 @@ def calcular_figura():
 
     tipo = pedir_tipo_calculo()
 
+    if tipo == "2" and not config.soporta_perimetro:
+        print("❌ El perímetro no está disponible para esta figura\n")
+        return
+
     argumentos = []
     for param in config.params:
         valor = pedir_entrada(
@@ -249,6 +254,8 @@ def calcular_figura():
     else:
         resultado = config.perimetro(*argumentos)
         texto = "perímetro"
+    if resultado is None:
+       return
 
     print("\n" + "=" * 45)
     print(f"✅ El {texto} de tu {config.nombre} es: {resultado:.2f}")
